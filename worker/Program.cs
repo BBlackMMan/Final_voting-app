@@ -16,8 +16,11 @@ namespace Worker
         {
             try
             {
-                var pgsql = OpenDbConnection("Server=localhost;Username=postgres;Password=postgres;");
-                var redisConn = OpenRedisConnection("localhost");
+                var pgsql = OpenDbConnection($"Server={Environment.GetEnvironmentVariable("POSTGRES_HOST")};" +
+                             $"Username={Environment.GetEnvironmentVariable("POSTGRES_USER")};" +
+                             $"Password={Environment.GetEnvironmentVariable("POSTGRES_PASSWORD")};" +
+                             $"Database={Environment.GetEnvironmentVariable("POSTGRES_DB")};");
+                var redisConn = OpenRedisConnection(Environment.GetEnvironmentVariable("REDIS_HOST"));
                 var redis = redisConn.GetDatabase();
 
                 var keepAliveCommand = pgsql.CreateCommand();
